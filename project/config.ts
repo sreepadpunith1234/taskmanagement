@@ -1,3 +1,3 @@
 export const config = {
-    baseUrl:"https://taskmanagement-lemon.vercel.app/"
+    baseUrl:"https://taskmanagement-lemon.vercel.app"
 }
