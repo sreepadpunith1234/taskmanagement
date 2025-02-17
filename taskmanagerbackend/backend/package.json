@@ -2,14 +2,15 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Backend for task management application.",
-  "main": "api/index.ts",
+  "main": "api/index.js",
   "scripts": {
-    "start": "ts-node api/index.ts",
-    "dev": "nodemon api/index.ts"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.3",
     "express": "^4.17.1",
     "express-validator": "^6.14.0",

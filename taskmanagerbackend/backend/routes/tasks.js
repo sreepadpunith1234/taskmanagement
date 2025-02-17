@@ -1,6 +1,5 @@
-import { Router } from 'express';
-import { Task } from '../models/Task';
-
+const { Router } = require("express")
+const { Task } = require("../models/Task")
 const router = Router();
 
 router.post('/', async (req, res) => {
@@ -27,4 +26,4 @@ router.delete('/:id', async (req, res) => {
   res.status(204).end();
 });
 
-export default router;
+module.exports = router;

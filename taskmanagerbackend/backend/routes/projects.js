@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { Project } from '../models/Project';
+const { Router } = require("express")
+const { Project } = require("../models/Project")
 
 const router = Router();
 
@@ -27,4 +27,4 @@ router.delete('/:id', async (req, res) => {
   res.status(204).end();
 });
 
-export default router;
+module.exports = router;

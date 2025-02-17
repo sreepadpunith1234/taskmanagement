@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+const authenticateToken = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) return res.sendStatus(401);
 
@@ -10,3 +9,5 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     next();
   });
 };
+
+module.exports = { authenticateToken };

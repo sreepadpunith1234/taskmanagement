@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import { User } from '../models/User';
-import jwt from 'jsonwebtoken';
-import { body, validationResult } from 'express-validator';
+const { Router } = require("express")
+const jwt = require("jsonwebtoken")
+const { body, validationResult } = require("express-validator")
+const { User } = require("../models/User")
 
 const router = Router();
 
@@ -14,6 +14,8 @@ router.post('/signup',
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
     const { username, password, email } = req.body;
+    console.log(username,password,email);
+    
     const user = await User.createUser(username, password, email);
     res.status(201).json(user);
   }
@@ -39,4 +41,4 @@ router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Logged out successfully' });
 });
 
-export default router;
+module.exports = router;

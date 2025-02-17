@@ -1,15 +1,15 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-import client from './index';
-import { pgTable, serial, text, varchar, integer } from 'drizzle-orm/pg-core';
+const { drizzle } = require('drizzle-orm/node-postgres');
+const client = require('./index');
+const { pgTable, serial, text, varchar, integer } = require('drizzle-orm/pg-core');
 
-export const users = pgTable('users', {
+const users = pgTable('users', {
   id: serial('id').primaryKey(),
   username: varchar('username', { length: 50 }).notNull(),
   password: text('password').notNull(),
   email: varchar('email', { length: 100 }).notNull(),
 });
 
-export const tasks = pgTable('tasks', {
+const tasks = pgTable('tasks', {
   id: serial('id').primaryKey(),
   title: varchar('title', { length: 100 }).notNull(),
   description: text('description').notNull(),
@@ -17,17 +17,25 @@ export const tasks = pgTable('tasks', {
   userId: integer('user_id').references(() => users.id),
 });
 
-export const projects = pgTable('projects', {
+const projects = pgTable('projects', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 100 }).notNull(),
   description: text('description'),
   userId: integer('user_id').references(() => users.id),
 });
 
-export const categories = pgTable('categories', {
+const categories = pgTable('categories', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 50 }).notNull(),
   userId: integer('user_id').references(() => users.id),
 });
 
-export const db = drizzle(client);
+const db = drizzle(client);
+
+module.exports = {
+  users,
+  tasks,
+  projects,
+  categories,
+  db,
+};
