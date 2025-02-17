@@ -8,8 +8,8 @@ import { Layout } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase"
 import { useToast } from "@/components/ui/use-toast"
+import { config } from "@/config"
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -34,36 +34,41 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      // Validate passwords match
+      // Validate password match
       if (formData.password !== formData.confirmPassword) {
         throw new Error("Passwords do not match")
       }
 
-      // Sign up with Supabase
-      const { data, error } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            full_name: formData.name,
-          },
+      // API call to register user
+      const res = await fetch(`${config.baseUrl}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
       })
 
-      if (error) throw error
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.message || "Registration failed")
+      }
 
       // Show success message
       toast({
         title: "Account created successfully!",
-        description: "You can now sign in with your credentials.",
+        description: "Check your email to verify your account before signing in.",
       })
 
       // Redirect to login page
       router.push("/login")
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Something went wrong",
+        description: error.message || "Something went wrong",
         variant: "destructive",
       })
     } finally {

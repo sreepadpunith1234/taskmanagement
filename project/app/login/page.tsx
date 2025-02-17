@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation"
 import { Layout } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { config } from "@/config"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -36,11 +37,28 @@ export default function LoginPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, you would validate credentials here
-    setUser(values.email)
-    toast.success("Logged in successfully")
-    router.push("/dashboard")
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await fetch(`${config.baseUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.message || "Login failed")
+      }
+
+      const data = await res.json()
+      setUser(data.user) // Assuming API returns user data
+      toast.success("Logged in successfully")
+      router.push("/dashboard")
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong")
+    }
   }
 
   return (
